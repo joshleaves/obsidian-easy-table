@@ -5,6 +5,10 @@ interface Column {
   label: string
 }
 
+interface RenderEasyTableOptions {
+  locale?: string
+}
+
 function escapeHtml(value: string): string {
   return value
     .replace(/&/g, '&amp;')
@@ -46,6 +50,18 @@ function renderMarkdownCell(markdown: string): string {
   return `<div class="easy-table-markdown">${escapeHtml(markdown)}</div>`
 }
 
+function createNumberFormatter(locale?: string): Intl.NumberFormat {
+  if (!locale) {
+    return new Intl.NumberFormat()
+  }
+
+  try {
+    return new Intl.NumberFormat(locale)
+  } catch {
+    return new Intl.NumberFormat()
+  }
+}
+
 function normalizeSpecialStringField(key: string, value: string): string {
   const normalizedKey = key.trim().toLowerCase()
   const trimmedValue = value.trim()
@@ -65,13 +81,13 @@ function normalizeSpecialStringField(key: string, value: string): string {
   return value
 }
 
-function renderValueCell(key: string, value: EasyTableValue | undefined): string {
+function renderValueCell(key: string, value: EasyTableValue | undefined, numberFormatter: Intl.NumberFormat): string {
   if (typeof value === 'boolean') {
     return renderMarkdownCell(value ? '✅' : '❌')
   }
 
   if (typeof value === 'number') {
-    return renderMarkdownCell(String(value))
+    return renderMarkdownCell(numberFormatter.format(value))
   }
 
   if (Array.isArray(value)) {
@@ -85,13 +101,13 @@ function renderValueCell(key: string, value: EasyTableValue | undefined): string
   return ''
 }
 
-function renderRow(row: EasyTableRow, columns: Column[], rowIndex: number): string {
+function renderRow(row: EasyTableRow, columns: Column[], rowIndex: number, numberFormatter: Intl.NumberFormat): string {
   const cells = columns.map((column) => {
     if (column.key === 'name') {
       return `<td class="easy-table-name">${renderMarkdownCell(row.name)}</td>`
     }
 
-    return `<td class="easy-table-cell" data-key="${escapeHtml(column.key)}">${renderValueCell(column.key, row.fields[column.key])}</td>`
+    return `<td class="easy-table-cell" data-key="${escapeHtml(column.key)}">${renderValueCell(column.key, row.fields[column.key], numberFormatter)}</td>`
   })
 
   return [
@@ -108,8 +124,9 @@ function renderRow(row: EasyTableRow, columns: Column[], rowIndex: number): stri
   ].join('')
 }
 
-export function renderEasyTableHtml(block: EasyTableBlock): string {
+export function renderEasyTableHtml(block: EasyTableBlock, options: RenderEasyTableOptions = {}): string {
   const columns = deriveColumns(block.rows)
+  const numberFormatter = createNumberFormatter(options.locale)
   const parts: string[] = ['<section class="easy-table-collection">', '<table class="easy-table">']
 
   parts.push('<thead><tr>')
@@ -127,7 +144,7 @@ export function renderEasyTableHtml(block: EasyTableBlock): string {
       continue
     }
 
-    parts.push(renderRow(row, columns, i))
+    parts.push(renderRow(row, columns, i, numberFormatter))
   }
 
   parts.push('</tbody></table></section>')

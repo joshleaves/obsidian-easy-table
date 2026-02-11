@@ -13,6 +13,7 @@ A compact, typed table renderer for Obsidian code blocks.
   - `Field[]=` -> string array
   - everything else -> markdown string
 - Markdown rendering inside cells
+- Locale-aware number formatting via `Intl.NumberFormat`
 - Compact precontent row per entry (keeps long names from bloating data columns)
 - Dynamic columns inferred from fields
 
@@ -50,6 +51,10 @@ Examples:
 - `33` -> `33`
 - `12,5` -> `12.5`
 - `-7.2` -> `-7.2`
+
+Displayed using locale formatting at render time:
+- default: Obsidian app language
+- optional override: plugin setting `Number locale override` (for example `en-US`, `fr-FR`)
 
 ### Arrays
 Keys ending in `[]` are parsed as string arrays (comma-separated):

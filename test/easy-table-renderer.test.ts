@@ -22,17 +22,35 @@ describe('renderEasyTableHtml', () => {
     }
 
     const html = renderEasyTableHtml(block)
+    const localizedYear = new Intl.NumberFormat().format(2009)
 
     expect(html).toContain('<tr class="easy-table-precontent">')
     expect(html).toContain('class="easy-table-precontent-cell"')
     expect(html).toContain('<tr class="easy-table-content">')
     expect(html).toContain('<div class="easy-table-markdown">✅</div>')
-    expect(html).toContain('<div class="easy-table-markdown">2009</div>')
+    expect(html).toContain(`<div class="easy-table-markdown">${localizedYear}</div>`)
     expect(html).toContain('<th scope="col" data-column-key="Feature">Feature</th>')
     expect(html).toContain('<th scope="col" data-column-key="Artist">Artist</th>')
     expect(html).toContain('![](https://images.example/photo.jpg)')
     expect(html).toContain('[Open](https://example.com/item)')
     expect(html).toContain('class="easy-table-markdown"')
+  })
+
+  it('formats numbers with provided locale', () => {
+    const block: EasyTableBlock = {
+      rows: [
+        {
+          name: 'Locale Test',
+          fields: {
+            Score: 12.5,
+          }
+        }
+      ]
+    }
+
+    const html = renderEasyTableHtml(block, { locale: 'fr-FR' })
+
+    expect(html).toContain('<div class="easy-table-markdown">12,5</div>')
   })
 
   it('escapes html in markdown containers', () => {
