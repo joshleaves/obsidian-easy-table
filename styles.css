@@ -1,0 +1,48 @@
+.easy-table th,
+.easy-table td {
+  padding: 4px 8px;
+  vertical-align: top;
+}
+
+.easy-table-precontent-cell {
+  padding: 1px 4px;
+  border-top: 1px solid var(--background-modifier-border);
+}
+
+.easy-table-precontent-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--text-faint);
+}
+
+.easy-table-precontent-title {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 500;
+  color: var(--text-faint);
+}
+
+.easy-table-precontent-meta {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  color: var(--text-faint);
+}
+
+.easy-table-markdown p {
+  margin: 0;
+}
+
+.markdown-rendered .easy-table-markdown p,
+.markdown-preview-view .easy-table-markdown p {
+  margin-block-start: 0 !important;
+  margin-block-end: 0 !important;
+  margin: 0 !important;
+}

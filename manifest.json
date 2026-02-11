@@ -1,0 +1,10 @@
+{
+  "id": "obsidian-easy-table",
+  "name": "Obsidian Easy Table",
+  "version": "0.0.1",
+  "minAppVersion": "1.5.0",
+  "description": "Easy typed markdown tables with compact precontent rows",
+  "author": "red",
+  "authorUrl": "",
+  "isDesktopOnly": false
+}
